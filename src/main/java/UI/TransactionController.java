@@ -27,6 +27,8 @@ public class TransactionController {
     private TextField amountField;
     @FXML
     private DatePicker dateField;
+    @FXML
+    private Label welcomeTitle;
 
     public void createButtonOnAction(ActionEvent event) {
 

@@ -39,6 +39,11 @@
             <artifactId>charm-glisten</artifactId>
             <version>6.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.8</version>
+        </dependency>
     </dependencies>
 
     <build>

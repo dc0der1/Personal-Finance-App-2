@@ -4,13 +4,16 @@ import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
 import java.io.IOException;
 import java.util.Objects;
 
 public class Main extends Application {
 
-    public static void main(String[] args) {
-        launch();
+    public static void main(String[] args) throws Exception { launch(); }
+
+    static void main() {
+
     }
 
     @Override
