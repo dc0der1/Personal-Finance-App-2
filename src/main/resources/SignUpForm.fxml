@@ -47,7 +47,7 @@
                   <Font name="Arial" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="errorLabel" alignment="CENTER" layoutX="152.0" layoutY="31.0" prefHeight="16.0" prefWidth="297.0" textFill="RED">
+            <Label fx:id="errorLabel" alignment="CENTER" layoutX="26.0" layoutY="31.0" prefHeight="16.0" prefWidth="548.0" textFill="RED">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>

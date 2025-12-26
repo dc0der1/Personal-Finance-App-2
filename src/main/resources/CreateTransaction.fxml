@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.TransactionController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.CreateTransactionController">
    <top>
       <AnchorPane prefHeight="85.0" prefWidth="600.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
          <children>
@@ -32,7 +32,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="createTransactionBtn" layoutX="219.0" layoutY="158.0" mnemonicParsing="false" onAction="#createButtonOnAction" prefHeight="31.0" prefWidth="169.0" style="-fx-background-radius: 50px; -fx-background-color: #66e364;" text="Create Transaction">
+            <Button fx:id="createTransactionBtn" layoutX="219.0" layoutY="158.0" mnemonicParsing="false" onAction="#createButtonOnAction" prefHeight="31.0" prefWidth="169.0" style="-fx-background-radius: 50px; -fx-background-color: #66e364; -fx-border-color: black; -fx-border-radius: 50px;" text="Create Transaction">
                <font>
                   <Font size="15.0" />
                </font>
@@ -40,7 +40,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Label fx:id="errorLabel" alignment="CENTER" layoutX="32.0" layoutY="133.0" prefHeight="17.0" prefWidth="537.0">
+            <Label fx:id="errorLabel" alignment="CENTER" layoutX="32.0" layoutY="133.0" prefHeight="17.0" prefWidth="537.0" textFill="RED">
                <font>
                   <Font name="Arial" size="16.0" />
                </font>
@@ -72,6 +72,17 @@
             <TextField fx:id="titleField" layoutX="226.0" layoutY="24.0" promptText="Salary" />
             <TextField fx:id="amountField" layoutX="226.0" layoutY="63.0" promptText="2000$" />
             <DatePicker fx:id="dateField" layoutX="226.0" layoutY="100.0" prefHeight="25.0" prefWidth="149.0" promptText="2025-11-25" />
+            <Button fx:id="TransactionsBtn" alignment="CENTER" layoutX="219.0" layoutY="200.0" mnemonicParsing="false" onAction="#transactionsButtonOnAction" prefHeight="31.0" prefWidth="169.0" style="-fx-background-radius: 50px; -fx-background-color: #263F73; -fx-border-color: white; -fx-border-radius: 50px;" text="Transactions" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </Button>
          </children>
       </AnchorPane>
    </center>

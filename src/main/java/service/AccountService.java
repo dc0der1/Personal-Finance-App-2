@@ -15,4 +15,13 @@ public class AccountService implements IAccountService {
     public void sendAccountToDB(Account account) throws Exception {
         accountRepository.addUser(account);
     }
+
+    public boolean foundAccountByUsername(String username) {
+        return accountRepository.foundByUsername(username);
+    }
+
+    @Override
+    public int getUserByID(String username) throws Exception {
+        return accountRepository.findIdByUsername(username);
+    }
 }

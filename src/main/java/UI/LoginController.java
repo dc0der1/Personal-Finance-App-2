@@ -1,6 +1,5 @@
 package UI;
 
-import database.PostgreSQLAccountRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +12,8 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
-import models.Account;
 import service.AccountService;
+import session.UserSession;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -22,7 +21,6 @@ import java.util.Objects;
 public class LoginController {
 
     private final AccountService accountService = new AccountService();
-    private final PostgreSQLAccountRepository postgreSQLAccountRepository = new PostgreSQLAccountRepository();
 
     private Stage stage;
     private Scene scene;
@@ -45,17 +43,27 @@ public class LoginController {
             errorLabel.setText("Please fill all the fields!");
             errorLabel.setTextFill(Paint.valueOf("RED"));
         } else {
+            if (accountService.foundAccountByUsername(usernameTextField.getText())) {
+                System.out.println("Account found!");
 
-//            Account account = new Account(usernameTextField.getText(), passwordPasswordField.getText());
-//            accountService.sendAccountToDB(account);
+                UserSession.setUsername(usernameTextField.getText());
+                UserSession.setId(accountService.getUserByID(usernameTextField.getText()));
 
-            // Here we change the scene to Transaction scene/page
-//            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Transaction.fxml")));
-//            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            scene = new Scene(root);
-//            stage.setScene(scene);
-//            stage.show();
-            postgreSQLAccountRepository.findUserByUsername(usernameTextField.getText(), passwordPasswordField.getText());
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/CreateTransaction.fxml"));
+                root = loader.load();
+
+                CreateTransactionController createTransactionController = loader.getController();
+                createTransactionController.setWelcomeTitle(usernameTextField.getText());
+
+                // Here we change the scene to Transaction scene/page
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+
+            } else {
+                errorLabel.setText("Account not found!");
+            }
         }
     }
 
@@ -73,5 +81,4 @@ public class LoginController {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
-
 }
