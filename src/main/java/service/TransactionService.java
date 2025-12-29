@@ -20,4 +20,8 @@ public class TransactionService implements ITransactionService{
 
     }
 
+//    public boolean foundSameTitle(Transaction transaction) {
+//        transactionRepository.addTransaction(transaction);
+//    }
+
 }

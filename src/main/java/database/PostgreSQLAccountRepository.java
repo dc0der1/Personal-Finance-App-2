@@ -1,6 +1,5 @@
 package database;
 
-import exceptions.UserAlreadyExistException;
 import models.Account;
 
 import java.sql.*;

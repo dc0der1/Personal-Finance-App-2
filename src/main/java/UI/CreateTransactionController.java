@@ -1,5 +1,6 @@
 package UI;
 
+import database.PostgreSQLTransactionRepository;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,6 +50,7 @@ public class CreateTransactionController {
     private Label welcomeTitle;
 
     private final ITransactionService transactionService = new TransactionService();
+    private final PostgreSQLTransactionRepository transactionRepository = new PostgreSQLTransactionRepository();
 
     public CreateTransactionController() throws SQLException {}
 
@@ -65,15 +67,19 @@ public class CreateTransactionController {
             } else {
                 int amount = Integer.parseInt(amountField.getText());
 
-                Transaction transaction = new Transaction(titleField.getText(), DateUtility.localdateToDate(dateField.getValue()), amount);
-                transactionService.sendTransactionToDb(transaction);
+                if (transactionRepository.isSameTitle(titleField.getText())) {
+                    errorLabel.setText("Title already exists");
+                } else {
+                    Transaction transaction = new Transaction(titleField.getText(), DateUtility.localdateToDate(dateField.getValue()), amount);
+                    transactionService.sendTransactionToDb(transaction);
 
-                errorLabel.setText("A transaction is created");
-                errorLabel.setTextFill(Paint.valueOf("GREEN"));
+                    errorLabel.setText("A transaction is created");
+                    errorLabel.setTextFill(Paint.valueOf("GREEN"));
 
-                titleField.clear();
-                amountField.clear();
-                dateField.setValue(null);
+                    titleField.clear();
+                    amountField.clear();
+                    dateField.setValue(null);
+                }
             }
         }
     }
@@ -87,6 +93,9 @@ public class CreateTransactionController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+        TransactionsController controller = loader.getController();
+        controller.loadTransactions();
     }
 
     // Set welcome title based on username

@@ -1,5 +1,8 @@
 package session;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserSession {
 
     private static int id = 1;

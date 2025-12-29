@@ -22,7 +22,7 @@ public class PostgreSQLTransactionRepository implements ITransactionRepository{
         try (Statement statement = connection.createStatement()) {
             statement.execute("CREATE TABLE IF NOT EXISTS transactions (" +
                     "id SERIAL PRIMARY KEY, " +
-                    "title VARCHAR(255), " +
+                    "title VARCHAR(255) UNIQUE, " +
                     "date DATE, " +
                     "amount INT, " +
                     "user_id INT REFERENCES users(id))");
@@ -33,7 +33,6 @@ public class PostgreSQLTransactionRepository implements ITransactionRepository{
     public void addTransaction(Transaction transaction) {
 
         String query = "INSERT INTO transactions (title, date, amount, user_id) VALUES (?, ?, ?, ?)";
-
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
 
@@ -50,8 +49,26 @@ public class PostgreSQLTransactionRepository implements ITransactionRepository{
         }
     }
 
-    public List<Transaction> getTitleTransaction() {
-        String query = "SELECT transactions.title, transactions.date, transactions.amount FROM transactions INNER JOIN users ON transactions.user_id = users.id WHERE users.username = ?";
+    public boolean isSameTitle(String title) {
+        String query = "SELECT * FROM transactions WHERE title = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, title);
+
+            ResultSet set = statement.executeQuery();
+
+            if (!set.next()) {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+
+        return true;
+    }
+
+    public List<Transaction> getAllUserTransactions() {
+        String query = "SELECT * FROM transactions INNER JOIN users ON transactions.user_id = users.id WHERE users.username = ?";
         List<Transaction> transactions = new ArrayList<>();
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -63,6 +80,63 @@ public class PostgreSQLTransactionRepository implements ITransactionRepository{
                 transactions.add(transaction);
             }
 
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+
+        return transactions;
+    }
+
+    public void deleteTransaction(String title, Date date, int amount) {
+        String query = "DELETE FROM transactions WHERE transactions.title = ? AND transactions.date = ? AND transactions.amount = ? AND user_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, title);
+            statement.setDate(2, DateUtility.dateToSqlDate(date));
+            statement.setInt(3, amount);
+            statement.setInt(4, UserSession.getId());
+            statement.executeUpdate();
+
+            System.out.println("Database: Transaction deleted successfully");
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+    }
+
+    public List<Transaction> getDailyTransactions() {
+        String query = "SELECT date, SUM(amount) AS amount FROM transactions WHERE user_id = ? GROUP BY date ORDER BY date";
+        List<Transaction> transactions = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, UserSession.getId());
+
+            ResultSet set = statement.executeQuery();
+
+            while (set.next()) {
+                Transaction transaction = new Transaction(set.getDate("date"), set.getInt("amount"));
+                transactions.add(transaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+
+        return transactions;
+    }
+
+    public List<Transaction> getWeeklyTransactions() {
+        String query = "SELECT trunc_date('weekly', date)::date AS date, SUM(amount) AS amount FROM transactions WHERE user_id = ? GROUP BY date ORDER BY date";
+        List<Transaction> transactions = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, UserSession.getId());
+
+            ResultSet set = statement.executeQuery();
+
+            while (set.next()) {
+                Transaction transaction = new Transaction(set.getDate("date"), set.getInt("amount"));
+                transactions.add(transaction);
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.out);
         }

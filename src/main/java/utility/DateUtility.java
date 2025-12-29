@@ -17,7 +17,7 @@ public class DateUtility {
     }
 
     public static String sqlDateToString(java.util.Date date) {
-        String pattern = "dd/MM/yyyy";
+        String pattern = "yyyy/MM/dd";
         DateFormat df = new SimpleDateFormat(pattern);
 
         return df.format(date);

@@ -5,12 +5,17 @@ import java.util.Date;
 
 public class Transaction {
 
-    private final String title;
-    private final Date date;
-    private final int amount;
+    private String title;
+    private Date date;
+    private int amount;
 
     public Transaction(String title, Date date, int amount) {
         this.title = title;
+        this.date = date;
+        this.amount = amount;
+    }
+
+    public Transaction(Date date, int amount) {
         this.date = date;
         this.amount = amount;
     }
