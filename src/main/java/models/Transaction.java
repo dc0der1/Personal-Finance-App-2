@@ -20,6 +20,10 @@ public class Transaction {
         this.amount = amount;
     }
 
+    public Transaction(int amount) {
+        this.amount = amount;
+    }
+
     public String getTitle() { return title; }
 
     public Date getDate() { return date; }

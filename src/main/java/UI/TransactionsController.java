@@ -19,8 +19,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Transaction;
+import service.ITransactionService;
+import service.TransactionService;
 import session.UserSession;
 import utility.DateUtility;
+import utility.SceneChangerUtility;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,85 +32,27 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class TransactionsController implements Initializable {
+public abstract class TransactionsController implements Initializable {
 
     private Stage stage;
     private Scene scene;
     private Parent root;
 
+    protected final ITransactionService transactionService = new TransactionService();
+
     @FXML
     private VBox verticalBox = new VBox();
     @FXML
-    private ChoiceBox<String> choiceBox;
+    protected ChoiceBox<String> choiceBox;
 
-    private final PostgreSQLTransactionRepository transactionRepository = new PostgreSQLTransactionRepository();
+    protected static final String[] choices = {"Show All", "Yearly", "Monthly", "Weekly", "Daily", "Balance", "Sign Out"};
 
-    private String[] choices = {"Show All", "Yearly", "Monthly", "Weekly", "Daily", "Sign Out"};
-
-    public TransactionsController() throws SQLException {}
-
-    public void loadTransactions() {
-
-        for (Transaction transactions : transactionRepository.getAllUserTransactions()) {
-
-            Label transactionTitle = new Label();
-            Label transactionDate = new Label();
-            Label transactionAmount = new Label();
-
-            Button deleteBtn = new Button("Delete");
-
-            transactionTitle.setText(transactions.getTitle());
-            transactionDate.setText(DateUtility.sqlDateToString(transactions.getDate()));
-            transactionAmount.setText(String.valueOf(transactions.getAmount()));
-
-            HBox hBox = new HBox();
-
-            deleteBtn.setOnAction((event) -> {
-
-                verticalBox.getChildren().remove(hBox);
-
-                String title  = transactions.getTitle();
-                Date date = (Date) transactions.getDate();
-                int amount = transactions.getAmount();
-
-                transactionRepository.deleteTransaction(title, date, amount);
-
-            });
-
-            hBox.getChildren().add(transactionTitle);
-            hBox.getChildren().add(transactionDate);
-            hBox.getChildren().add(transactionAmount);
-            hBox.getChildren().add(deleteBtn);
-            verticalBox.getChildren().add(hBox);
-
-            styleLabels(transactionTitle);
-            styleLabels(transactionDate);
-            styleLabels(transactionAmount);
-            styleBoxes(hBox, verticalBox);
-            styleButtons(deleteBtn);
-
-        }
-    }
+    public abstract void load();
 
     public void getChoice(ActionEvent event) {
         String choice = choiceBox.getValue();
-        if (choice.equals("Weekly")) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/WeeklyTransactions.fxml"));
-            try {
-                root = loader.load();
-            } catch (IOException e) {
-                e.printStackTrace(System.out);
-            }
-
-            // Here we change the scene to Transaction scene/page
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-
-            WeeklyTransactionsController controller = loader.getController();
-            controller.loadDailyTransactions();
-        }
+        SceneChangerUtility controller =  new SceneChangerUtility();
+        controller.changeScene(choice, event);
     }
 
     // Style method
@@ -146,7 +91,7 @@ public class TransactionsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         choiceBox.getItems().addAll(choices);
-        choiceBox.getSelectionModel().select(0);
+        choiceBox.getSelectionModel().select(getChoice());
         choiceBox.setOnAction(this::getChoice);
     }
 }

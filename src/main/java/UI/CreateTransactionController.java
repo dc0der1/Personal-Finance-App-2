@@ -14,14 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import models.Transaction;
-import service.AccountService;
-import service.IAccountService;
 import service.ITransactionService;
 import service.TransactionService;
-import session.UserSession;
 import utility.DateUtility;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class CreateTransactionController {
@@ -85,7 +81,7 @@ public class CreateTransactionController {
     }
 
     public void transactionsButtonOnAction(ActionEvent event) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Transactions.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Show AllTransactions.fxml"));
         root = loader.load();
 
         // Here we change the scene to Transaction scene/page
@@ -94,8 +90,8 @@ public class CreateTransactionController {
         stage.setScene(scene);
         stage.show();
 
-        TransactionsController controller = loader.getController();
-        controller.loadTransactions();
+        ShowAllController controller = loader.getController();
+        controller.load();
     }
 
     // Set welcome title based on username

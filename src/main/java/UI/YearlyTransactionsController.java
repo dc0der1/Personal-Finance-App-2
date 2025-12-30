@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -16,14 +15,10 @@ import models.Transaction;
 import utility.DateUtility;
 
 import java.net.URL;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class WeeklyTransactionsController extends TransactionsController {
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+public class YearlyTransactionsController extends TransactionsController {
 
     @FXML
     private VBox verticalBox = new VBox();
@@ -31,7 +26,7 @@ public class WeeklyTransactionsController extends TransactionsController {
     @Override
     public void load() {
 
-        for (Transaction transactions : transactionService.getWeekly()) {
+        for (Transaction transactions : transactionService.getYearly()) {
 
             Label transactionDate = new Label();
             Label transactionAmount = new Label();
@@ -51,4 +46,5 @@ public class WeeklyTransactionsController extends TransactionsController {
 
         }
     }
+
 }

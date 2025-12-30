@@ -20,10 +20,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class WeeklyTransactionsController extends TransactionsController {
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+public class MonthlyTransactionsController extends TransactionsController {
 
     @FXML
     private VBox verticalBox = new VBox();
@@ -31,7 +28,7 @@ public class WeeklyTransactionsController extends TransactionsController {
     @Override
     public void load() {
 
-        for (Transaction transactions : transactionService.getWeekly()) {
+        for (Transaction transactions : transactionService.getMonthly()) {
 
             Label transactionDate = new Label();
             Label transactionAmount = new Label();
@@ -51,4 +48,5 @@ public class WeeklyTransactionsController extends TransactionsController {
 
         }
     }
+
 }
