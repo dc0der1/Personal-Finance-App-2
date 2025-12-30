@@ -19,28 +19,15 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class BalanceController implements Initializable {
-
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
-
-    private String[] choices = {"Show All", "Yearly", "Monthly", "Weekly", "Daily", "Sign Out"};
+public class BalanceController extends TransactionsController {
 
     @FXML
     private VBox verticalBox = new VBox();
-    @FXML
-    private ChoiceBox<String> dailyTransactions;
-    @FXML
-    private ChoiceBox<String> choiceBox;
 
-    private final PostgreSQLTransactionRepository transactionRepository = new PostgreSQLTransactionRepository();
+    @Override
+    public void load() {
 
-    public BalanceController() throws SQLException {}
-
-    public void loadBalance() {
-
-        for (Transaction transactions : transactionRepository.getBalance()) {
+        for (Transaction transactions : transactionService.getBalance()) {
 
             Label balanceLabel = new Label("Balance: ");
             Label balance = new Label();
@@ -57,19 +44,6 @@ public class BalanceController implements Initializable {
             TransactionsController.styleLabels(balanceLabel);
             TransactionsController.styleLabels(balance);
             TransactionsController.styleBoxes(hBox, verticalBox);
-
         }
     }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        choiceBox.getItems().addAll(choices);
-        choiceBox.getSelectionModel().select(2);
-        choiceBox.setOnAction(this::getChoice);
-    }
-
-    public void getChoice(ActionEvent event) {
-        String choice = choiceBox.getValue();
-    }
-
 }

@@ -91,7 +91,7 @@ public abstract class TransactionsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         choiceBox.getItems().addAll(choices);
-        choiceBox.getSelectionModel().select(getChoice());
+        choiceBox.getSelectionModel().getSelectedItem();
         choiceBox.setOnAction(this::getChoice);
     }
 }

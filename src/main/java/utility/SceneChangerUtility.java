@@ -52,6 +52,9 @@ public class SceneChangerUtility {
                 DailyTransactionsController daily = loader.getController();
                 daily.load();
                 break;
+            case "Balance":
+                BalanceController balance = loader.getController();
+                balance.load();
             default:
                 break;
         }
