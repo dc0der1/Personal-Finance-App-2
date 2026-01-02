@@ -13,25 +13,29 @@ public class PostgreSQLTransactionRepository implements ITransactionRepository{
 
     private Connection connection;
 
-    private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/financedb";
-    private static final String USER = "postgres";
-    private static final String PASS = "password";
+    private static final String db_URL = System.getenv("DB_URL");
+    private static final String user = System.getenv("DB_USER");
+    private static final String pass = System.getenv("DB_PASS");
 
     public PostgreSQLTransactionRepository() {
 
         try {
-            connection = DriverManager.getConnection(JDBC_URL, USER, PASS);
+            connection = DriverManager.getConnection(db_URL, user, pass);
         } catch (SQLException e) {
             e.printStackTrace(System.out);
         }
 
-        try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE IF NOT EXISTS transactions (" +
-                    "id SERIAL PRIMARY KEY, " +
-                    "title VARCHAR(255) UNIQUE, " +
-                    "date DATE, " +
-                    "amount INT, " +
-                    "user_id INT REFERENCES users(id))");
+        try {
+            assert connection != null;
+            try (Statement statement = connection.createStatement()) {
+                statement.execute("CREATE TABLE IF NOT EXISTS transactions (" +
+                        "id SERIAL PRIMARY KEY, " +
+                        "title VARCHAR(255), " +
+                        "date DATE, " +
+                        "amount INT, " +
+                        "user_id INT REFERENCES users(id), " +
+                        "UNIQUE (title, user_id))");
+            }
         } catch (SQLException e) {
             e.printStackTrace(System.out);
         }

@@ -4,10 +4,8 @@ import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import session.UserSession;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 
 public class Main extends Application {
@@ -17,8 +15,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("CreateTransaction.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Sign Out.fxml")));
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("styles.css")).toExternalForm());
         stage.setScene(scene);
 
         stage.initStyle(StageStyle.UNDECORATED);

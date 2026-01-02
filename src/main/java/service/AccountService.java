@@ -9,10 +9,8 @@ public class AccountService implements IAccountService {
 
     private final PostgreSQLAccountRepository accountRepository = new PostgreSQLAccountRepository();
 
-    public AccountService() throws SQLException {}
-
     @Override
-    public void sendAccountToDB(Account account) throws Exception {
+    public void createAccount(Account account) {
         accountRepository.addUser(account);
     }
 
@@ -21,7 +19,7 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public int getUserByID(String username) throws Exception {
+    public int getUserByID(String username) {
         return accountRepository.findIdByUsername(username);
     }
 }

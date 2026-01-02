@@ -38,13 +38,17 @@ public class ShowAllController extends TransactionsController {
 
             deleteBtn.setOnAction((event) -> {
 
-                verticalBox.getChildren().remove(hBox);
-
                 String title  = transactions.getTitle();
                 Date date = (Date) transactions.getDate();
                 int amount = transactions.getAmount();
 
-                transactionService.deleteTransaction(title, date, amount);
+                try {
+                    transactionService.deleteTransaction(title, date, amount);
+                    verticalBox.getChildren().remove(hBox);
+                } catch (Exception e) {
+                    System.out.println("Could not delete transaction");
+                }
+
 
             });
 

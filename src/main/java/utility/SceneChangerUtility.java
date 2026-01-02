@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import session.UserSession;
 
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ public class SceneChangerUtility {
 
     public void changeScene(String choice, ActionEvent event) {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/" + choice + "Transactions.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/" + choice + ".fxml"));
         try {
             root = loader.load();
         } catch (IOException e) {
@@ -55,6 +56,10 @@ public class SceneChangerUtility {
             case "Balance":
                 BalanceController balance = loader.getController();
                 balance.load();
+                break;
+            case "Sign Out":
+                UserSession.setId(0);
+                UserSession.setUsername("");
             default:
                 break;
         }

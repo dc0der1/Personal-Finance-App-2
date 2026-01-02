@@ -49,7 +49,7 @@ public class LoginController {
                 UserSession.setUsername(usernameTextField.getText());
                 UserSession.setId(accountService.getUserByID(usernameTextField.getText()));
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/CreateTransaction.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Create.fxml"));
                 root = loader.load();
 
                 CreateTransactionController createTransactionController = loader.getController();

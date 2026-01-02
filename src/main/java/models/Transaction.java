@@ -25,8 +25,6 @@ public class Transaction {
     }
 
     public String getTitle() { return title; }
-
     public Date getDate() { return date; }
-
     public int getAmount() { return amount; }
 }

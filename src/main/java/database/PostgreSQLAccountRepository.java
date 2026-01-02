@@ -6,20 +6,30 @@ import java.sql.*;
 
 public class PostgreSQLAccountRepository implements IAccountRepository {
 
-    private final Connection connection;
+    private Connection connection;
 
-    private static final String JDBC_URL = "jdbc:postgresql://localhost:5432/financedb";
-    private static final String USER = "postgres";
-    private static final String PASS = "password";
+    private static final String db_URL = System.getenv("DB_URL");
+    private static final String user = System.getenv("DB_USER");
+    private static final String pass = System.getenv("DB_PASS");
 
-    public PostgreSQLAccountRepository() throws SQLException {
-        connection = DriverManager.getConnection(JDBC_URL, USER, PASS);
+    public PostgreSQLAccountRepository() {
 
-        try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE IF NOT EXISTS users (" +
-                    "id SERIAL PRIMARY KEY, " +
-                    "username VARCHAR(20) UNIQUE, " +
-                    "password VARCHAR(100))");
+        try {
+            connection = DriverManager.getConnection(db_URL, user, pass);
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+
+        try {
+            assert connection != null;
+            try (Statement statement = connection.createStatement()) {
+                statement.execute("CREATE TABLE IF NOT EXISTS users (" +
+                        "id SERIAL PRIMARY KEY, " +
+                        "username VARCHAR(20) UNIQUE, " +
+                        "password VARCHAR(100))");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
         }
     }
 
