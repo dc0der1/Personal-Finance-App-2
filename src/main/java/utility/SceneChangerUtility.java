@@ -60,6 +60,10 @@ public class SceneChangerUtility {
             case "Sign Out":
                 UserSession.setId(0);
                 UserSession.setUsername("");
+
+                System.out.println("User signed out");
+                System.out.println("Session: " +  UserSession.getUsername());
+                System.out.println("Session ID: " + UserSession.getId());
             default:
                 break;
         }

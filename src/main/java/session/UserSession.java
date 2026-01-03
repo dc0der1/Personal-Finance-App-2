@@ -5,8 +5,8 @@ import java.util.List;
 
 public class UserSession {
 
-    private static int id = 1;
-    private static String username = "admin";
+    private static int id;
+    private static String username;
 
     public static String getUsername() { return username; }
     public static int getId() { return id; }

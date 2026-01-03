@@ -4,7 +4,7 @@ import models.Account;
 
 public interface IAccountService {
 
-    void createAccount(Account account);
-    int getUserByID(String username);
+    void createAccount(String username, String password, String confirmPassword);
+    int getIdByUsername(String username);
 
 }

@@ -58,6 +58,28 @@ public class PostgreSQLAccountRepository implements IAccountRepository {
 
             // If the user is not found
             if (!set.next()) {
+                System.out.println("Database: User not found or incorrect password");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+
+        return true;
+    }
+
+    public boolean foundByUsernameAndPassword(String username, String password) {
+        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+
+            ResultSet set = statement.executeQuery();
+
+            // If the user is not found
+            if (!set.next()) {
                 System.out.println("Database: User not found");
                 return false;
             }
@@ -90,5 +112,27 @@ public class PostgreSQLAccountRepository implements IAccountRepository {
         }
 
         return -1;
+    }
+
+    public String getPasswordByUsername(String username) {
+        String query = "SELECT password FROM users WHERE username = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+
+            ResultSet set = statement.executeQuery();
+
+            if (!set.next()) {
+                System.out.println("Database: Password not found");
+                return "null";
+            }
+
+            return set.getString("password");
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+
+        return "null";
     }
 }

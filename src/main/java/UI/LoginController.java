@@ -1,5 +1,6 @@
 package UI;
 
+import exceptions.ValidationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,35 +36,23 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
-    public LoginController() throws SQLException {}
-
     public void loginButtonOnAction(ActionEvent event) throws Exception {
 
-        if (usernameTextField.getText().isBlank() || passwordPasswordField.getText().isBlank()) {
-            errorLabel.setText("Please fill all the fields!");
-            errorLabel.setTextFill(Paint.valueOf("RED"));
-        } else {
-            if (accountService.foundAccountByUsername(usernameTextField.getText())) {
-                System.out.println("Account found!");
+        try {
+            accountService.authenticate(usernameTextField.getText(), passwordPasswordField.getText());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Create.fxml"));
+            root = loader.load();
 
-                UserSession.setUsername(usernameTextField.getText());
-                UserSession.setId(accountService.getUserByID(usernameTextField.getText()));
+            CreateTransactionController createTransactionController = loader.getController();
+            createTransactionController.setWelcomeTitle(usernameTextField.getText());
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Create.fxml"));
-                root = loader.load();
-
-                CreateTransactionController createTransactionController = loader.getController();
-                createTransactionController.setWelcomeTitle(usernameTextField.getText());
-
-                // Here we change the scene to Transaction scene/page
-                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
-
-            } else {
-                errorLabel.setText("Account not found!");
-            }
+            // Here we change the scene to Transaction scene/page
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (ValidationException e) {
+            errorLabel.setText(e.getMessage());
         }
     }
 

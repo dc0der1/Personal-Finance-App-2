@@ -1,6 +1,7 @@
 package UI;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import exceptions.ValidationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,27 +42,12 @@ public class SignUpController {
     private final AccountService accountService = new AccountService();
 
     public void signUpButtonOnAction(ActionEvent event) {
-
-        if (usernameField.getText().isBlank() || passwordField.getText().isBlank() || confirmPasswordField.getText().isBlank()) {
-            errorLabel.setText("Please fill all the fields");
-        } else if (!passwordField.getText().equals(confirmPasswordField.getText())) {
-            errorLabel.setText("Passwords do not match");
-        } else if (passwordField.getText().length() < 8) {
-            errorLabel.setText("Password should be at least 8 characters");
-        } else if (usernameField.getText().length() < 3) {
-            errorLabel.setText("Username should be at least 3 characters");
-        } else {
-
-            if (accountService.foundAccountByUsername(usernameField.getText())) {
-                errorLabel.setText("Username is taken.");
-            } else {
-                String hashedPassword = BCrypt.withDefaults().hashToString(12, passwordField.getText().toCharArray());
-
-                Account account = new Account(usernameField.getText(), hashedPassword);
-                accountService.createAccount(account);
-                errorLabel.setText("Account created successfully! Click login button.");
-                errorLabel.setTextFill(Paint.valueOf("green"));
-            }
+        try {
+            accountService.createAccount(usernameField.getText(), passwordField.getText(), confirmPasswordField.getText());
+            errorLabel.setText("Account created successfully!");
+            errorLabel.setTextFill(Paint.valueOf("green"));
+        } catch (ValidationException e) {
+            errorLabel.setText(e.getMessage());
         }
     }
 
